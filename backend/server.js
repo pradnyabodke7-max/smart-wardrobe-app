@@ -27,8 +27,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong on the server' });
+  console.error('ERROR DETAILS:', err);
+  res.status(500).json({ message: err.message || 'Something went wrong on the server' });
 });
 
 const PORT = process.env.PORT || 5000;
