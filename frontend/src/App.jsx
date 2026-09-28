@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Closet from "./pages/Closet";
+import Outfits from "./pages/Outfits";
 import "./index.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/closet" element={<Closet />} />
+        <Route path="/outfits" element={<Outfits />} />
       </Routes>
     </BrowserRouter>
   );

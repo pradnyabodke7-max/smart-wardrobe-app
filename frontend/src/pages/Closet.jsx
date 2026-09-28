@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import Navbar from "../components/Navbar";
 
 const CATEGORIES = ["Top", "Bottom", "Dress", "Outerwear", "Footwear", "Accessory"];
 
 function Closet() {
-  const name = localStorage.getItem("userName");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -35,12 +35,6 @@ function Closet() {
   useEffect(() => {
     fetchItems();
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
-    window.location.href = "/login";
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -91,13 +85,7 @@ function Closet() {
 
   return (
     <div className="app-shell">
-      <nav className="topbar">
-        <div className="topbar-brand">Smart Wardrobe</div>
-        <div className="topbar-right">
-          <span>Hi, {name}</span>
-          <button className="link-btn" onClick={handleLogout}>Log out</button>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="page-content">
         <div className="page-header">
