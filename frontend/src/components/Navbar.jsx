@@ -15,6 +15,7 @@ function Navbar() {
       <div className="topbar-brand">Smart Wardrobe</div>
 
       <div className="topbar-links">
+        <NavLink to="/feed">Home</NavLink>
         <NavLink to="/closet">Closet</NavLink>
         <NavLink to="/outfits">Outfits</NavLink>
         <NavLink to="/calendar">Calendar</NavLink>
