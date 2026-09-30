@@ -1,46 +1,44 @@
 
-/* ===== Home Feed ===== */
+/* ===== Closet search/edit ===== */
 
-.feed-list {
+.filter-bar {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
-.feed-card {
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid #e6dcd8;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6d2e46;
+}
+
+.filter-bar select {
+  padding: 10px 14px;
+  border: 1.5px solid #e6dcd8;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
   background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
 }
 
-.feed-thumbs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+.closet-card-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-.feed-thumbs img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-}
-
-.feed-card-body {
-  padding: 18px 20px;
-}
-
-.feed-card-body h2 {
+.builder-card-title {
   font-family: 'Fraunces', serif;
-  font-size: 19px;
-  margin: 0 0 6px;
+  font-size: 18px;
+  margin: 0 0 18px;
   color: #2a2a2a;
-}
-
-.feed-items-list {
-  font-size: 13px;
-  color: #6d2e46;
-  margin: 8px 0 0;
 }

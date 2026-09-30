@@ -10,6 +10,10 @@ function Closet() {
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [editingId, setEditingId] = useState(null);
+
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +27,10 @@ function Closet() {
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/api/closet");
+      const params = {};
+      if (search) params.search = search;
+      if (categoryFilter) params.category = categoryFilter;
+      const res = await api.get("/api/closet", { params });
       setItems(res.data);
     } catch (err) {
       console.error(err);
@@ -33,18 +40,43 @@ function Closet() {
   };
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    const timer = setTimeout(() => {
+      fetchItems();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search, categoryFilter]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleAddItem = async (e) => {
+  const resetForm = () => {
+    setForm({ name: "", category: "Top", brand: "", fabric: "", color: "" });
+    setImageFile(null);
+    setEditingId(null);
+    setShowForm(false);
+    setError("");
+  };
+
+  const handleStartEdit = (item) => {
+    setForm({
+      name: item.name,
+      category: item.category,
+      brand: item.brand || "",
+      fabric: item.fabric || "",
+      color: item.color || "",
+    });
+    setImageFile(null);
+    setEditingId(item._id);
+    setShowForm(true);
+    setError("");
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!imageFile) {
+    if (!editingId && !imageFile) {
       setError("Please choose a photo for this item.");
       return;
     }
@@ -57,18 +89,22 @@ function Closet() {
       data.append("brand", form.brand);
       data.append("fabric", form.fabric);
       data.append("color", form.color);
-      data.append("image", imageFile);
+      if (imageFile) data.append("image", imageFile);
 
-      await api.post("/api/closet", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (editingId) {
+        await api.put(`/api/closet/${editingId}`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        await api.post("/api/closet", data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
 
-      setForm({ name: "", category: "Top", brand: "", fabric: "", color: "" });
-      setImageFile(null);
-      setShowForm(false);
+      resetForm();
       fetchItems();
     } catch (err) {
-      setError(err.response?.data?.message || "Could not add item");
+      setError(err.response?.data?.message || "Could not save item");
     } finally {
       setSubmitting(false);
     }
@@ -90,13 +126,20 @@ function Closet() {
       <div className="page-content">
         <div className="page-header">
           <h1>My Closet</h1>
-          <button className="primary-btn" onClick={() => setShowForm(!showForm)}>
+          <button
+            className="primary-btn"
+            onClick={() => (showForm ? resetForm() : setShowForm(true))}
+          >
             {showForm ? "Cancel" : "+ Add Item"}
           </button>
         </div>
 
         {showForm && (
-          <form className="item-form" onSubmit={handleAddItem}>
+          <form className="item-form" onSubmit={handleSubmit}>
+            <h2 className="builder-card-title">
+              {editingId ? "Edit item" : "Add a new item"}
+            </h2>
+
             {error && <p className="error-text">{error}</p>}
 
             <div className="form-row">
@@ -130,25 +173,51 @@ function Closet() {
             </div>
 
             <div className="form-group">
-              <label>Photo</label>
+              <label>Photo{editingId ? " (leave empty to keep current photo)" : ""}</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImageFile(e.target.files[0])}
-                required
+                required={!editingId}
               />
             </div>
 
             <button type="submit" className="primary-btn" disabled={submitting}>
-              {submitting ? "Adding..." : "Add to Closet"}
+              {submitting
+                ? "Saving..."
+                : editingId
+                ? "Save Changes"
+                : "Add to Closet"}
             </button>
           </form>
         )}
 
+        <div className="filter-bar">
+          <input
+            className="search-input"
+            placeholder="Search your closet..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <option value="">All categories</option>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
         {loading ? (
           <p>Loading your closet...</p>
         ) : items.length === 0 ? (
-          <p className="empty-text">Your closet is empty. Add your first item above.</p>
+          <p className="empty-text">
+            {search || categoryFilter
+              ? "No items match your search."
+              : "Your closet is empty. Add your first item above."}
+          </p>
         ) : (
           <div className="closet-grid">
             {items.map((item) => (
@@ -158,9 +227,14 @@ function Closet() {
                   <h3>{item.name}</h3>
                   <p className="closet-card-category">{item.category}</p>
                   {item.brand && <p className="closet-card-meta">{item.brand}</p>}
-                  <button className="delete-btn" onClick={() => handleDelete(item._id)}>
-                    Delete
-                  </button>
+                  <div className="closet-card-actions">
+                    <button className="link-btn" onClick={() => handleStartEdit(item)}>
+                      Edit
+                    </button>
+                    <button className="delete-btn" onClick={() => handleDelete(item._id)}>
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
