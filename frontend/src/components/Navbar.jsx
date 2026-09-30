@@ -17,6 +17,7 @@ function Navbar() {
       <div className="topbar-links">
         <NavLink to="/closet">Closet</NavLink>
         <NavLink to="/outfits">Outfits</NavLink>
+        <NavLink to="/calendar">Calendar</NavLink>
       </div>
 
       <div className="topbar-right">

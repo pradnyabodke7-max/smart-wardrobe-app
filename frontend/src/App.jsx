@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Closet from "./pages/Closet";
 import Outfits from "./pages/Outfits";
+import Calendar from "./pages/Calendar";
 import "./index.css";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/closet" element={<Closet />} />
         <Route path="/outfits" element={<Outfits />} />
+        <Route path="/calendar" element={<Calendar />} />
       </Routes>
     </BrowserRouter>
   );
