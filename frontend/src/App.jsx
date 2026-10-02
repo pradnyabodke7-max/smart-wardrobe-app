@@ -5,6 +5,7 @@ import Closet from "./pages/Closet";
 import Outfits from "./pages/Outfits";
 import Calendar from "./pages/Calendar";
 import Feed from "./pages/Feed";
+import Home from "./pages/Home";
 import "./index.css";
 
 function App() {
@@ -13,9 +14,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to={isLoggedIn ? "/feed" : "/login"} />} />
+        <Route path="/" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/closet" element={<Closet />} />
         <Route path="/outfits" element={<Outfits />} />
         <Route path="/calendar" element={<Calendar />} />

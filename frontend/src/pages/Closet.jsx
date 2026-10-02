@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
+import "./Closet.css";
 
 const CATEGORIES = ["Top", "Bottom", "Dress", "Outerwear", "Footwear", "Accessory"];
 
@@ -70,6 +71,7 @@ function Closet() {
     setEditingId(item._id);
     setShowForm(true);
     setError("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSubmit = async (e) => {
@@ -120,12 +122,19 @@ function Closet() {
   };
 
   return (
-    <div className="app-shell">
+    <div className="app-shell closet-page">
       <Navbar />
 
       <div className="page-content">
-        <div className="page-header">
-          <h1>My Closet</h1>
+        <div className="closet-head">
+          <div>
+            <p className="closet-eyebrow">Your collection</p>
+            <h1 className="closet-title">My Closet</h1>
+            <p className="closet-sub">
+              {items.length} {items.length === 1 ? "piece" : "pieces"}
+              {categoryFilter ? ` in ${categoryFilter}` : " in your wardrobe"}
+            </p>
+          </div>
           <button
             className="primary-btn"
             onClick={() => (showForm ? resetForm() : setShowForm(true))}
@@ -199,42 +208,58 @@ function Closet() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            <option value="">All categories</option>
+          <div className="pill-row">
+            <button
+              className={`pill ${categoryFilter === "" ? "active" : ""}`}
+              onClick={() => setCategoryFilter("")}
+            >
+              All
+            </button>
             {CATEGORIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
+              <button
+                key={c}
+                className={`pill ${categoryFilter === c ? "active" : ""}`}
+                onClick={() => setCategoryFilter(c)}
+              >
+                {c}
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         {loading ? (
-          <p>Loading your closet...</p>
+          <p className="empty-text">Loading your closet...</p>
         ) : items.length === 0 ? (
           <p className="empty-text">
             {search || categoryFilter
               ? "No items match your search."
-              : "Your closet is empty. Add your first item above."}
+              : "Your closet is empty. Add your first piece above."}
           </p>
         ) : (
           <div className="closet-grid">
             {items.map((item) => (
               <div className="closet-card" key={item._id}>
-                <img src={item.imageUrl} alt={item.name} />
-                <div className="closet-card-body">
-                  <h3>{item.name}</h3>
-                  <p className="closet-card-category">{item.category}</p>
-                  {item.brand && <p className="closet-card-meta">{item.brand}</p>}
+                <div className="closet-card-img">
+                  <img src={item.imageUrl} alt={item.name} />
+                  <span className="closet-card-tag">{item.category}</span>
                   <div className="closet-card-actions">
-                    <button className="link-btn" onClick={() => handleStartEdit(item)}>
+                    <button
+                      className="closet-action"
+                      onClick={() => handleStartEdit(item)}
+                    >
                       Edit
                     </button>
-                    <button className="delete-btn" onClick={() => handleDelete(item._id)}>
+                    <button
+                      className="closet-action danger"
+                      onClick={() => handleDelete(item._id)}
+                    >
                       Delete
                     </button>
                   </div>
+                </div>
+                <div className="closet-card-body">
+                  <h3>{item.name}</h3>
+                  {item.brand && <p className="closet-card-meta">{item.brand}</p>}
                 </div>
               </div>
             ))}
