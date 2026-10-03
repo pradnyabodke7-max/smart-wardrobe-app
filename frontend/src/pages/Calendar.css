@@ -1,0 +1,353 @@
+.calendar-page {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.calendar-page .cal-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 48px 90px;
+}
+
+/* ---------- Header ---------- */
+.calendar-page .cal-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.calendar-page .cal-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.calendar-page .cal-title {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+  color: var(--ink);
+}
+
+.calendar-page .cal-sub {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.calendar-page .month-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.calendar-page .month-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calendar-page .month-btn:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.calendar-page .month-label {
+  min-width: 190px;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- Grid ---------- */
+.calendar-page .cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-page .cal-weekday {
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.calendar-page .cal-cell {
+  position: relative;
+  min-height: 130px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--beige);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.calendar-page .cal-cell:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(90, 62, 54, 0.12);
+}
+
+.calendar-page .cal-cell.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+.calendar-page .cal-cell.today {
+  border-color: var(--brown);
+}
+
+.calendar-page .cal-cell.today .cal-day {
+  background: var(--brown);
+  color: #fff;
+}
+
+.calendar-page .cal-cell.selected {
+  border: 2px solid var(--olive);
+  box-shadow: 0 12px 28px rgba(123, 132, 103, 0.25);
+}
+
+.calendar-page .cal-day {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 13px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink);
+  background: rgba(246, 241, 234, 0.9);
+}
+
+.calendar-page .cal-entry {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.calendar-page .cal-entry img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.calendar-page .cal-entry-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 26px 10px 8px;
+  background: linear-gradient(transparent, rgba(43, 36, 32, 0.78));
+  color: #fff;
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.calendar-page .cal-entry.no-photo {
+  background: var(--beige);
+}
+
+/* ---------- Plan panel ---------- */
+.calendar-page .plan-card {
+  margin-top: 40px;
+  background: #fff;
+  border: 1px solid var(--beige);
+  padding: 32px;
+  box-shadow: 0 14px 40px rgba(90, 62, 54, 0.08);
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.calendar-page .plan-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  background: var(--cream);
+  padding: 6px;
+  min-height: 200px;
+}
+
+.calendar-page .plan-preview img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+.calendar-page .plan-preview-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 12px;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.calendar-page .plan-title {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.calendar-page .plan-date {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 22px;
+}
+
+.calendar-page .cal-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.calendar-page .cal-field label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.calendar-page .cal-field input,
+.calendar-page .cal-field select {
+  padding: 12px 14px;
+  border: 1px solid var(--beige);
+  background: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink);
+  outline: none;
+}
+
+.calendar-page .cal-field input:focus,
+.calendar-page .cal-field select:focus {
+  border-color: var(--olive);
+}
+
+.calendar-page .error-text {
+  color: #b3392f;
+  font-size: 0.88rem;
+  margin: 0 0 14px;
+}
+
+.calendar-page .plan-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.calendar-page .primary-btn {
+  background: var(--olive);
+  color: #fff;
+  border: none;
+  padding: 14px 30px;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.calendar-page .primary-btn:hover {
+  background: var(--brown);
+}
+
+.calendar-page .primary-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.calendar-page .cal-remove {
+  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  padding: 14px 24px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calendar-page .cal-remove:hover {
+  background: #b3392f;
+  border-color: #b3392f;
+  color: #fff;
+}
+
+.calendar-page .empty-text {
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 1.3rem;
+}
+
+.calendar-page .empty-text a {
+  color: var(--olive);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+  .calendar-page .cal-content {
+    padding: 28px 12px 60px;
+  }
+  .calendar-page .cal-title {
+    font-size: 2.4rem;
+  }
+  .calendar-page .month-label {
+    min-width: 140px;
+    font-size: 1.5rem;
+  }
+  .calendar-page .cal-grid {
+    gap: 4px;
+  }
+  .calendar-page .cal-cell {
+    min-height: 82px;
+    padding: 6px;
+  }
+  .calendar-page .cal-entry-name {
+    display: none;
+  }
+  .calendar-page .plan-card {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}

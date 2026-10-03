@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import "./Auth.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -26,43 +27,59 @@ function Login() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-brand">Smart Wardrobe</div>
-      <div className="auth-tagline">
-        <h1>Your closet, organised at last.</h1>
-        <p>Catalogue what you own, build outfits you'll actually wear, and plan ahead with your own style calendar.</p>
+    <div className="sw-auth">
+      <div className="sw-auth-art">
+        <span className="sw-auth-word">STYLE</span>
+        <div className="sw-auth-brand">Smart Wardrobe</div>
+
+        <div className="sw-auth-tagline">
+          <h1>Your closet, organised at last.</h1>
+          <p>
+            Catalogue what you own, build outfits you'll actually wear, and
+            plan ahead with your own style calendar.
+          </p>
+        </div>
+
+        <div className="sw-auth-foot">Wear more. Think less.</div>
       </div>
 
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Welcome back</h2>
-        <p className="subtitle">Log in to your wardrobe</p>
+      <div className="sw-auth-panel">
+        <form className="sw-auth-form" onSubmit={handleSubmit}>
+          <p className="sw-auth-eyebrow">Welcome back</p>
+          <h2 className="sw-auth-title">Log In</h2>
+          <p className="sw-auth-sub">Log in to your wardrobe</p>
 
-        {error && <p className="error-text">{error}</p>}
+          {error && <p className="sw-auth-error">{error}</p>}
 
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <div className="sw-auth-field">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <div className="sw-auth-field">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Log In"}
-        </button>
+          <button type="submit" className="sw-auth-btn" disabled={loading}>
+            {loading ? "Logging in..." : "Log In"}
+          </button>
 
-        <p className="switch-text">
-          Don't have an account? <Link to="/register">Register</Link>
-        </p>
-      </form>
+          <p className="sw-auth-switch">
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

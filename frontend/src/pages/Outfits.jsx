@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
+import "./Outfits.css";
+
+const CATEGORIES = ["Top", "Bottom", "Dress", "Outerwear", "Footwear", "Accessory"];
 
 function Outfits() {
   const [items, setItems] = useState([]);
@@ -12,6 +15,7 @@ function Outfits() {
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   const loadData = async () => {
     try {
@@ -72,26 +76,64 @@ function Outfits() {
     }
   };
 
+  const selectedItems = selected
+    .map((id) => items.find((i) => i._id === id))
+    .filter(Boolean);
+
+  const visibleItems = categoryFilter
+    ? items.filter((i) => i.category === categoryFilter)
+    : items;
+
   return (
-    <div className="app-shell">
+    <div className="app-shell outfits-page">
       <Navbar />
 
-      <div className="page-content">
-        <div className="page-header">
-          <h1>Outfit Builder</h1>
+      <div className="outfits-content">
+        <div className="outfits-head">
+          <p className="outfits-eyebrow">Mix &amp; match</p>
+          <h1 className="outfits-title">Outfit Builder</h1>
+          <p className="outfits-sub">
+            Pick pieces from your closet and see the look come together.
+          </p>
         </div>
 
         {loading ? (
-          <p>Loading...</p>
+          <p className="empty-text">Loading...</p>
         ) : (
           <>
-            <form className="builder-card" onSubmit={handleSave}>
-              <h2>Create a new outfit</h2>
+            <div className="builder">
+              {/* ---------- Left: look board ---------- */}
+              <form className="board" onSubmit={handleSave}>
+                <h2 className="board-title">Your Look</h2>
+                <p className="board-count">
+                  {selected.length} {selected.length === 1 ? "piece" : "pieces"} selected
+                </p>
 
-              {error && <p className="error-text">{error}</p>}
+                <div className="board-canvas">
+                  {selectedItems.length === 0 ? (
+                    <div className="board-empty">
+                      Tap pieces on the right to start building your outfit
+                    </div>
+                  ) : (
+                    selectedItems.map((item) => (
+                      <div className="board-piece" key={item._id}>
+                        <img src={item.imageUrl} alt={item.name} />
+                        <span className="board-piece-tag">{item.category}</span>
+                        <button
+                          type="button"
+                          className="board-piece-remove"
+                          onClick={() => toggleItem(item._id)}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
 
-              <div className="form-row">
-                <div className="form-group">
+                {error && <p className="error-text">{error}</p>}
+
+                <div className="board-field">
                   <label>Outfit name</label>
                   <input
                     value={name}
@@ -100,7 +142,7 @@ function Outfits() {
                     required
                   />
                 </div>
-                <div className="form-group">
+                <div className="board-field">
                   <label>Notes (optional)</label>
                   <input
                     value={notes}
@@ -108,64 +150,93 @@ function Outfits() {
                     placeholder="e.g. Good for cool weather"
                   />
                 </div>
-              </div>
 
-              <label className="pick-label">
-                Pick items from your closet ({selected.length} selected)
-              </label>
+                <button
+                  type="submit"
+                  className="primary-btn"
+                  disabled={saving || items.length === 0}
+                >
+                  {saving ? "Saving..." : "Save Outfit"}
+                </button>
+              </form>
 
-              {items.length === 0 ? (
-                <p className="empty-text">
-                  Your closet is empty. <Link to="/closet">Add items first</Link>.
-                </p>
-              ) : (
-                <div className="pick-grid">
-                  {items.map((item) => (
-                    <div
-                      key={item._id}
-                      className={
-                        selected.includes(item._id)
-                          ? "pick-card selected"
-                          : "pick-card"
-                      }
-                      onClick={() => toggleItem(item._id)}
+              {/* ---------- Right: closet picker ---------- */}
+              <div>
+                <h2 className="picker-title">Your Closet</h2>
+
+                <div className="pill-row">
+                  <button
+                    type="button"
+                    className={`pill ${categoryFilter === "" ? "active" : ""}`}
+                    onClick={() => setCategoryFilter("")}
+                  >
+                    All
+                  </button>
+                  {CATEGORIES.map((c) => (
+                    <button
+                      type="button"
+                      key={c}
+                      className={`pill ${categoryFilter === c ? "active" : ""}`}
+                      onClick={() => setCategoryFilter(c)}
                     >
-                      <img src={item.imageUrl} alt={item.name} />
-                      <p>{item.name}</p>
-                    </div>
+                      {c}
+                    </button>
                   ))}
                 </div>
-              )}
 
-              <button
-                type="submit"
-                className="primary-btn"
-                disabled={saving || items.length === 0}
-              >
-                {saving ? "Saving..." : "Save Outfit"}
-              </button>
-            </form>
+                {items.length === 0 ? (
+                  <p className="empty-text">
+                    Your closet is empty. <Link to="/closet">Add items first</Link>.
+                  </p>
+                ) : visibleItems.length === 0 ? (
+                  <p className="empty-text">No items in this category.</p>
+                ) : (
+                  <div className="pick-grid">
+                    {visibleItems.map((item) => (
+                      <div
+                        key={item._id}
+                        className={
+                          selected.includes(item._id)
+                            ? "pick-card selected"
+                            : "pick-card"
+                        }
+                        onClick={() => toggleItem(item._id)}
+                      >
+                        <div className="pick-card-img">
+                          <img src={item.imageUrl} alt={item.name} />
+                        </div>
+                        <span className="pick-check">✓</span>
+                        <p>{item.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
 
-            <h2 className="section-title">Saved outfits</h2>
+            {/* ---------- Saved outfits ---------- */}
+            <div className="saved-head">
+              <p className="outfits-eyebrow">Curated looks</p>
+              <h2 className="saved-title">Saved Outfits</h2>
+            </div>
 
             {outfits.length === 0 ? (
               <p className="empty-text">No outfits saved yet.</p>
             ) : (
-              <div className="outfit-grid">
+              <div className="saved-grid">
                 {outfits.map((outfit) => (
-                  <div className="outfit-card" key={outfit._id}>
-                    <div className="outfit-thumbs">
+                  <div className="saved-card" key={outfit._id}>
+                    <div className="saved-thumbs">
                       {outfit.items.filter(Boolean).map((item) => (
                         <img key={item._id} src={item.imageUrl} alt={item.name} />
                       ))}
                     </div>
-                    <div className="outfit-card-body">
+                    <div className="saved-body">
                       <h3>{outfit.name}</h3>
-                      {outfit.notes && (
-                        <p className="closet-card-meta">{outfit.notes}</p>
-                      )}
+                      {outfit.notes && <p className="saved-notes">{outfit.notes}</p>}
                       <button
-                        className="delete-btn"
+                        type="button"
+                        className="saved-delete"
                         onClick={() => handleDelete(outfit._id)}
                       >
                         Delete

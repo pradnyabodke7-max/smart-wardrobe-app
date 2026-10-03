@@ -1,0 +1,229 @@
+.feed-page {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.feed-page .feed-content {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 48px 90px;
+}
+
+/* ---------- Header ---------- */
+.feed-page .feed-head {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.feed-page .feed-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.feed-page .feed-title {
+  font-family: var(--serif);
+  font-size: 3.4rem;
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+  color: var(--ink);
+}
+
+.feed-page .feed-sub {
+  margin: 14px auto 0;
+  max-width: 480px;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+/* ---------- Feed list ---------- */
+.feed-page .feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.feed-page .feed-card {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: #fff;
+  border: 1px solid var(--beige);
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+
+.feed-page .feed-card:hover {
+  box-shadow: 0 22px 50px rgba(90, 62, 54, 0.14);
+}
+
+.feed-page .feed-card.flip .feed-collage {
+  order: 2;
+}
+
+/* ---------- Collage ---------- */
+.feed-page .feed-collage {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+  background: var(--beige);
+  min-height: 460px;
+}
+
+.feed-page .feed-collage.one {
+  grid-template-columns: 1fr;
+}
+
+.feed-page .feed-collage.three img:first-child {
+  grid-row: span 2;
+}
+
+.feed-page .feed-collage img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s;
+}
+
+.feed-page .feed-card:hover .feed-collage img {
+  transform: scale(1.03);
+}
+
+.feed-page .feed-collage-clip {
+  overflow: hidden;
+}
+
+/* ---------- Details ---------- */
+.feed-page .feed-details {
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feed-page .feed-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin: 0 0 12px;
+}
+
+.feed-page .feed-name {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.05;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+.feed-page .feed-notes {
+  margin: 0 0 26px;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.feed-page .feed-pieces-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 10px;
+  margin: 0 0 6px;
+  border-bottom: 1px solid var(--beige);
+}
+
+.feed-page .feed-piece {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--beige);
+}
+
+.feed-page .feed-piece img {
+  width: 46px;
+  height: 58px;
+  object-fit: cover;
+  background: var(--beige);
+  flex-shrink: 0;
+}
+
+.feed-page .feed-piece-name {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.feed-page .feed-piece-cat {
+  margin-top: 3px;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.feed-page .feed-link {
+  align-self: flex-start;
+  margin-top: 26px;
+  display: inline-block;
+  text-decoration: none;
+  padding: 13px 28px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+
+.feed-page .feed-link:hover {
+  background: var(--olive);
+}
+
+.feed-page .empty-text {
+  text-align: center;
+  color: var(--muted);
+  padding: 80px 0;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+}
+
+.feed-page .empty-text a {
+  color: var(--olive);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .feed-page .feed-content {
+    padding: 28px 16px 60px;
+  }
+  .feed-page .feed-title {
+    font-size: 2.6rem;
+  }
+  .feed-page .feed-card {
+    grid-template-columns: 1fr;
+  }
+  .feed-page .feed-card.flip .feed-collage {
+    order: 0;
+  }
+  .feed-page .feed-collage {
+    min-height: 340px;
+  }
+  .feed-page .feed-details {
+    padding: 28px 22px;
+  }
+  .feed-page .feed-name {
+    font-size: 2rem;
+  }
+}

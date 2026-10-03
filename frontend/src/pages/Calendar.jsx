@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
+import "./Calendar.css";
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -125,13 +126,24 @@ function Calendar() {
     today.getDate()
   )}`;
 
+  const chosenOutfit = outfits.find((o) => o._id === outfitId);
+  const previewItems = chosenOutfit
+    ? chosenOutfit.items.filter(Boolean).slice(0, 4)
+    : [];
+
   return (
-    <div className="app-shell">
+    <div className="app-shell calendar-page">
       <Navbar />
 
-      <div className="page-content">
-        <div className="page-header">
-          <h1>Style Calendar</h1>
+      <div className="cal-content">
+        <div className="cal-head">
+          <div>
+            <p className="cal-eyebrow">Plan ahead</p>
+            <h1 className="cal-title">Style Calendar</h1>
+            <p className="cal-sub">
+              Pick tomorrow's look today. Tap any day to plan an outfit.
+            </p>
+          </div>
           <div className="month-nav">
             <button className="month-btn" onClick={goPrev}>&larr;</button>
             <span className="month-label">
@@ -141,30 +153,32 @@ function Calendar() {
           </div>
         </div>
 
-        <div className="calendar-grid">
+        <div className="cal-grid">
           {WEEKDAYS.map((d) => (
-            <div className="calendar-weekday" key={d}>{d}</div>
+            <div className="cal-weekday" key={d}>{d}</div>
           ))}
 
           {cells.map((day, i) => {
             if (day === null) {
-              return <div className="calendar-cell empty" key={`e${i}`} />;
+              return <div className="cal-cell empty" key={`e${i}`} />;
             }
             const dateStr = `${monthKey}-${pad(day)}`;
             const entry = entryByDate[dateStr];
             const firstItem = entry?.outfit?.items?.filter(Boolean)[0];
 
-            let cls = "calendar-cell";
+            let cls = "cal-cell";
             if (dateStr === todayStr) cls += " today";
             if (dateStr === selectedDate) cls += " selected";
 
             return (
               <div className={cls} key={dateStr} onClick={() => handleSelectDay(day)}>
-                <span className="calendar-day">{day}</span>
+                <span className="cal-day">{day}</span>
                 {entry && (
-                  <div className="calendar-entry">
+                  <div className={firstItem ? "cal-entry" : "cal-entry no-photo"}>
                     {firstItem && <img src={firstItem.imageUrl} alt="" />}
-                    <span>{entry.outfit?.name || "Outfit removed"}</span>
+                    <span className="cal-entry-name">
+                      {entry.outfit?.name || "Outfit removed"}
+                    </span>
                   </div>
                 )}
               </div>
@@ -174,18 +188,31 @@ function Calendar() {
 
         {selectedDate && (
           <form className="plan-card" onSubmit={handleSave}>
-            <h2>Plan for {selectedDate}</h2>
+            <div className="plan-preview">
+              {previewItems.length === 0 ? (
+                <div className="plan-preview-empty">
+                  Choose an outfit to preview it here
+                </div>
+              ) : (
+                previewItems.map((item) => (
+                  <img key={item._id} src={item.imageUrl} alt={item.name} />
+                ))
+              )}
+            </div>
 
-            {error && <p className="error-text">{error}</p>}
+            <div>
+              <h2 className="plan-title">Plan this day</h2>
+              <p className="plan-date">{selectedDate}</p>
 
-            {outfits.length === 0 ? (
-              <p className="empty-text">
-                You have no saved outfits yet. <Link to="/outfits">Create one first</Link>.
-              </p>
-            ) : (
-              <>
-                <div className="form-row">
-                  <div className="form-group">
+              {error && <p className="error-text">{error}</p>}
+
+              {outfits.length === 0 ? (
+                <p className="empty-text">
+                  You have no saved outfits yet. <Link to="/outfits">Create one first</Link>.
+                </p>
+              ) : (
+                <>
+                  <div className="cal-field">
                     <label>Outfit</label>
                     <select value={outfitId} onChange={(e) => setOutfitId(e.target.value)}>
                       <option value="">Choose an outfit</option>
@@ -194,7 +221,7 @@ function Calendar() {
                       ))}
                     </select>
                   </div>
-                  <div className="form-group">
+                  <div className="cal-field">
                     <label>Note (optional)</label>
                     <input
                       value={note}
@@ -202,20 +229,20 @@ function Calendar() {
                       placeholder="e.g. Farewell party"
                     />
                   </div>
-                </div>
 
-                <div className="plan-actions">
-                  <button type="submit" className="primary-btn" disabled={saving}>
-                    {saving ? "Saving..." : "Save Plan"}
-                  </button>
-                  {entryByDate[selectedDate] && (
-                    <button type="button" className="delete-btn" onClick={handleRemove}>
-                      Remove plan
+                  <div className="plan-actions">
+                    <button type="submit" className="primary-btn" disabled={saving}>
+                      {saving ? "Saving..." : "Save Plan"}
                     </button>
-                  )}
-                </div>
-              </>
-            )}
+                    {entryByDate[selectedDate] && (
+                      <button type="button" className="cal-remove" onClick={handleRemove}>
+                        Remove plan
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </form>
         )}
       </div>

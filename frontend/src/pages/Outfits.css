@@ -1,0 +1,416 @@
+.outfits-page {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.outfits-page .outfits-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 48px 90px;
+}
+
+/* ---------- Header ---------- */
+.outfits-page .outfits-head {
+  margin-bottom: 36px;
+}
+
+.outfits-page .outfits-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.outfits-page .outfits-title {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+  color: var(--ink);
+}
+
+.outfits-page .outfits-sub {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Builder layout ---------- */
+.outfits-page .builder {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* ---------- Left: the look board ---------- */
+.outfits-page .board {
+  position: sticky;
+  top: 100px;
+  background: #fff;
+  border: 1px solid var(--beige);
+  padding: 28px;
+  box-shadow: 0 14px 40px rgba(90, 62, 54, 0.08);
+}
+
+.outfits-page .board-title {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.outfits-page .board-count {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+
+.outfits-page .board-canvas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  min-height: 260px;
+  margin-bottom: 22px;
+  background: var(--cream);
+  padding: 10px;
+}
+
+.outfits-page .board-piece {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--beige);
+  overflow: hidden;
+}
+
+.outfits-page .board-piece img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.outfits-page .board-piece-tag {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  background: rgba(246, 241, 234, 0.92);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+}
+
+.outfits-page .board-piece-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(43, 36, 32, 0.75);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.outfits-page .board-piece-remove:hover {
+  background: #b3392f;
+}
+
+.outfits-page .board-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+/* ---------- Board form ---------- */
+.outfits-page .board-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.outfits-page .board-field label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.outfits-page .board-field input {
+  padding: 12px 14px;
+  border: 1px solid var(--beige);
+  background: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink);
+  outline: none;
+}
+
+.outfits-page .board-field input:focus {
+  border-color: var(--olive);
+}
+
+.outfits-page .error-text {
+  color: #b3392f;
+  font-size: 0.88rem;
+  margin: 0 0 14px;
+}
+
+.outfits-page .primary-btn {
+  width: 100%;
+  background: var(--olive);
+  color: #fff;
+  border: none;
+  padding: 15px 28px;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.outfits-page .primary-btn:hover {
+  background: var(--brown);
+}
+
+.outfits-page .primary-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Right: picker ---------- */
+.outfits-page .picker-title {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.outfits-page .pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.outfits-page .pill {
+  padding: 9px 20px;
+  border: 1px solid var(--beige);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.outfits-page .pill:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.outfits-page .pill.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+}
+
+.outfits-page .pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 18px;
+}
+
+.outfits-page .pick-card {
+  position: relative;
+  cursor: pointer;
+  background: #fff;
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.outfits-page .pick-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(90, 62, 54, 0.14);
+}
+
+.outfits-page .pick-card.selected {
+  border-color: var(--olive);
+}
+
+.outfits-page .pick-card-img {
+  aspect-ratio: 3 / 4;
+  background: var(--beige);
+  overflow: hidden;
+}
+
+.outfits-page .pick-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.outfits-page .pick-card p {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.outfits-page .pick-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--olive);
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+.outfits-page .pick-card.selected .pick-check {
+  display: flex;
+}
+
+.outfits-page .empty-text {
+  text-align: center;
+  color: var(--muted);
+  padding: 50px 0;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+}
+
+.outfits-page .empty-text a {
+  color: var(--olive);
+}
+
+/* ---------- Saved outfits ---------- */
+.outfits-page .saved-head {
+  text-align: center;
+  margin: 90px 0 36px;
+}
+
+.outfits-page .saved-title {
+  font-family: var(--serif);
+  font-size: 2.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.outfits-page .saved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 26px;
+}
+
+.outfits-page .saved-card {
+  background: #fff;
+  border: 1px solid var(--beige);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.outfits-page .saved-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(90, 62, 54, 0.12);
+}
+
+.outfits-page .saved-thumbs {
+  display: flex;
+  height: 260px;
+  gap: 2px;
+  background: var(--beige);
+}
+
+.outfits-page .saved-thumbs img {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  object-fit: cover;
+}
+
+.outfits-page .saved-body {
+  padding: 18px 22px 22px;
+}
+
+.outfits-page .saved-body h3 {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.outfits-page .saved-notes {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.outfits-page .saved-delete {
+  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  padding: 8px 18px;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.outfits-page .saved-delete:hover {
+  background: #b3392f;
+  border-color: #b3392f;
+  color: #fff;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .outfits-page .builder {
+    grid-template-columns: 1fr;
+  }
+  .outfits-page .board {
+    position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  .outfits-page .outfits-content {
+    padding: 28px 18px 60px;
+  }
+  .outfits-page .outfits-title {
+    font-size: 2.4rem;
+  }
+  .outfits-page .pick-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
