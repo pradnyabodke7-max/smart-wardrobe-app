@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import "./Auth.css";
 
 function Register() {
   const [name, setName] = useState("");
@@ -27,52 +28,70 @@ function Register() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-brand">Smart Wardrobe</div>
-      <div className="auth-tagline">
-        <h1>Plan outfits before you open the closet.</h1>
-        <p>Create an account to start cataloguing your clothes and building looks you'll actually wear.</p>
+    <div className="sw-auth">
+      <div className="sw-auth-art">
+        <span className="sw-auth-word">STYLE</span>
+        <div className="sw-auth-brand">Smart Wardrobe</div>
+
+        <div className="sw-auth-tagline">
+          <h1>Plan outfits before you open the closet.</h1>
+          <p>
+            Create an account to start cataloguing your clothes and building
+            looks you'll actually wear.
+          </p>
+        </div>
+
+        <div className="sw-auth-foot">Wear more. Think less.</div>
       </div>
 
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Create an account</h2>
-        <p className="subtitle">Start building your digital wardrobe</p>
+      <div className="sw-auth-panel">
+        <form className="sw-auth-form" onSubmit={handleSubmit}>
+          <p className="sw-auth-eyebrow">Get started</p>
+          <h2 className="sw-auth-title">Register</h2>
+          <p className="sw-auth-sub">Start building your digital wardrobe</p>
 
-        {error && <p className="error-text">{error}</p>}
+          {error && <p className="sw-auth-error">{error}</p>}
 
-        <label>Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+          <div className="sw-auth-field">
+            <label>Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <div className="sw-auth-field">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-        />
+          <div className="sw-auth-field">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating account..." : "Register"}
-        </button>
+          <button type="submit" className="sw-auth-btn" disabled={loading}>
+            {loading ? "Creating account..." : "Register"}
+          </button>
 
-        <p className="switch-text">
-          Already have an account? <Link to="/login">Log In</Link>
-        </p>
-      </form>
+          <p className="sw-auth-switch">
+            Already have an account? <Link to="/login">Log In</Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
