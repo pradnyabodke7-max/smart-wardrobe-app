@@ -13,6 +13,8 @@ const clothingItemSchema = new mongoose.Schema(
     fabric: { type: String, trim: true, default: '' },
     color: { type: String, trim: true, default: '' },
     imageUrl: { type: String, required: true },
+    backImageUrl: { type: String, default: '' },
+    sideImageUrl: { type: String, default: '' },
   },
   { timestamps: true }
 );

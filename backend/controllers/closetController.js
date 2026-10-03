@@ -24,10 +24,15 @@ const addItem = async (req, res) => {
         .status(400)
         .json({ message: 'Name and category are required' });
     }
-    if (!req.file) {
+
+    const front = req.files?.image?.[0];
+    const back = req.files?.backImage?.[0];
+    const side = req.files?.sideImage?.[0];
+
+    if (!front) {
       return res
         .status(400)
-        .json({ message: 'A photo of the item is required' });
+        .json({ message: 'A front photo of the item is required' });
     }
 
     const item = await ClothingItem.create({
@@ -37,7 +42,9 @@ const addItem = async (req, res) => {
       brand,
       fabric,
       color,
-      imageUrl: req.file.path,
+      imageUrl: front.path,
+      backImageUrl: back ? back.path : '',
+      sideImageUrl: side ? side.path : '',
     });
 
     res.status(201).json(item);
@@ -60,7 +67,14 @@ const updateItem = async (req, res) => {
     if (brand !== undefined) item.brand = brand;
     if (fabric !== undefined) item.fabric = fabric;
     if (color !== undefined) item.color = color;
-    if (req.file) item.imageUrl = req.file.path;
+
+    const front = req.files?.image?.[0];
+    const back = req.files?.backImage?.[0];
+    const side = req.files?.sideImage?.[0];
+
+    if (front) item.imageUrl = front.path;
+    if (back) item.backImageUrl = back.path;
+    if (side) item.sideImageUrl = side.path;
 
     await item.save();
     res.json(item);

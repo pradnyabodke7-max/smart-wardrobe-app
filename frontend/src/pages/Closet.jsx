@@ -2,8 +2,62 @@ import { useState, useEffect } from "react";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
 import "./Closet.css";
+import "./ClosetViews.css";
 
 const CATEGORIES = ["Top", "Bottom", "Dress", "Outerwear", "Footwear", "Accessory"];
+
+function ClosetCard({ item, onEdit, onDelete }) {
+  const [view, setView] = useState("front");
+
+  const views = [{ key: "front", label: "Front", url: item.imageUrl }];
+  if (item.backImageUrl) {
+    views.push({ key: "back", label: "Back", url: item.backImageUrl });
+  }
+  if (item.sideImageUrl) {
+    views.push({ key: "side", label: "Side", url: item.sideImageUrl });
+  }
+
+  const current = views.find((v) => v.key === view) || views[0];
+
+  return (
+    <div className="closet-card">
+      <div className="closet-card-img">
+        <img src={current.url} alt={item.name} />
+        <span className="closet-card-tag">{item.category}</span>
+        <div className="closet-card-actions">
+          <button className="closet-action" onClick={() => onEdit(item)}>
+            Edit
+          </button>
+          <button
+            className="closet-action danger"
+            onClick={() => onDelete(item._id)}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+      <div className="closet-card-body">
+        <h3>{item.name}</h3>
+        {item.brand && <p className="closet-card-meta">{item.brand}</p>}
+
+        {views.length > 1 && (
+          <div className="view-tabs">
+            {views.map((v) => (
+              <button
+                key={v.key}
+                type="button"
+                className={`view-tab ${current.key === v.key ? "active" : ""}`}
+                onClick={() => setView(v.key)}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function Closet() {
   const [items, setItems] = useState([]);
@@ -24,6 +78,8 @@ function Closet() {
     color: "",
   });
   const [imageFile, setImageFile] = useState(null);
+  const [backFile, setBackFile] = useState(null);
+  const [sideFile, setSideFile] = useState(null);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -54,6 +110,8 @@ function Closet() {
   const resetForm = () => {
     setForm({ name: "", category: "Top", brand: "", fabric: "", color: "" });
     setImageFile(null);
+    setBackFile(null);
+    setSideFile(null);
     setEditingId(null);
     setShowForm(false);
     setError("");
@@ -68,6 +126,8 @@ function Closet() {
       color: item.color || "",
     });
     setImageFile(null);
+    setBackFile(null);
+    setSideFile(null);
     setEditingId(item._id);
     setShowForm(true);
     setError("");
@@ -79,7 +139,7 @@ function Closet() {
     setError("");
 
     if (!editingId && !imageFile) {
-      setError("Please choose a photo for this item.");
+      setError("Please choose a front photo for this item.");
       return;
     }
 
@@ -92,6 +152,8 @@ function Closet() {
       data.append("fabric", form.fabric);
       data.append("color", form.color);
       if (imageFile) data.append("image", imageFile);
+      if (backFile) data.append("backImage", backFile);
+      if (sideFile) data.append("sideImage", sideFile);
 
       if (editingId) {
         await api.put(`/api/closet/${editingId}`, data, {
@@ -181,14 +243,36 @@ function Closet() {
               </div>
             </div>
 
-            <div className="form-group">
-              <label>Photo{editingId ? " (leave empty to keep current photo)" : ""}</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImageFile(e.target.files[0])}
-                required={!editingId}
-              />
+            <div className="photo-fields">
+              <div className="photo-field">
+                <label>Front photo{editingId ? "" : " *"}</label>
+                <p className="photo-hint">
+                  {editingId ? "Leave empty to keep current" : "Required"}
+                </p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files[0])}
+                />
+              </div>
+              <div className="photo-field">
+                <label>Back photo</label>
+                <p className="photo-hint">Optional</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setBackFile(e.target.files[0])}
+                />
+              </div>
+              <div className="photo-field">
+                <label>Side photo</label>
+                <p className="photo-hint">Optional</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setSideFile(e.target.files[0])}
+                />
+              </div>
             </div>
 
             <button type="submit" className="primary-btn" disabled={submitting}>
@@ -238,30 +322,12 @@ function Closet() {
         ) : (
           <div className="closet-grid">
             {items.map((item) => (
-              <div className="closet-card" key={item._id}>
-                <div className="closet-card-img">
-                  <img src={item.imageUrl} alt={item.name} />
-                  <span className="closet-card-tag">{item.category}</span>
-                  <div className="closet-card-actions">
-                    <button
-                      className="closet-action"
-                      onClick={() => handleStartEdit(item)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="closet-action danger"
-                      onClick={() => handleDelete(item._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-                <div className="closet-card-body">
-                  <h3>{item.name}</h3>
-                  {item.brand && <p className="closet-card-meta">{item.brand}</p>}
-                </div>
-              </div>
+              <ClosetCard
+                key={item._id}
+                item={item}
+                onEdit={handleStartEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
         )}
