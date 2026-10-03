@@ -3,13 +3,40 @@ import { Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
 import "./Home.css";
+import "./TodayLook.css";
 
 const CATEGORIES = ["Top", "Bottom", "Dress", "Outerwear", "Footwear", "Accessory"];
+
+function pickRandom(items, category) {
+  const list = items.filter((i) => i.category === category);
+  if (list.length === 0) return null;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function buildLook(items) {
+  const hasTops = items.some((i) => i.category === "Top");
+  const hasBottoms = items.some((i) => i.category === "Bottom");
+  const hasDresses = items.some((i) => i.category === "Dress");
+
+  const useDress =
+    hasDresses && (!hasTops || !hasBottoms || Math.random() < 0.3);
+
+  const look = useDress
+    ? [pickRandom(items, "Dress")]
+    : [pickRandom(items, "Top"), pickRandom(items, "Bottom")];
+
+  if (Math.random() < 0.4) look.push(pickRandom(items, "Outerwear"));
+  look.push(pickRandom(items, "Footwear"));
+  look.push(pickRandom(items, "Accessory"));
+
+  return look.filter(Boolean);
+}
 
 function Home() {
   const name = localStorage.getItem("userName") || "there";
   const [items, setItems] = useState([]);
   const [outfits, setOutfits] = useState([]);
+  const [look, setLook] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,6 +44,7 @@ function Home() {
       .then(([closetRes, outfitRes]) => {
         setItems(closetRes.data);
         setOutfits(outfitRes.data);
+        setLook(buildLook(closetRes.data));
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
@@ -67,6 +95,43 @@ function Home() {
             <span className="home-stat-label">Categories</span>
           </div>
         </div>
+
+        {!loading && (
+          <div className="today-look">
+            <div className="today-look-text">
+              <p className="today-look-eyebrow">Today's suggestion</p>
+              <h2>What should I wear?</h2>
+              <p>
+                A look put together from your own closet. Not feeling it?
+                Shuffle for a new combination.
+              </p>
+              <button
+                className="today-look-btn"
+                onClick={() => setLook(buildLook(items))}
+                disabled={items.length === 0}
+              >
+                Shuffle
+              </button>
+            </div>
+            {look.length > 0 ? (
+              <div className="today-look-pieces">
+                {look.map((piece) => (
+                  <div className="today-look-piece" key={piece._id}>
+                    <img src={piece.imageUrl} alt={piece.name} />
+                    <div className="today-look-piece-info">
+                      <span>{piece.category}</span>
+                      <strong>{piece.name}</strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="today-look-empty">
+                Add a few items to your closet to get suggestions.
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="home-section-head">
           <p className="home-section-eyebrow">Shop by category</p>

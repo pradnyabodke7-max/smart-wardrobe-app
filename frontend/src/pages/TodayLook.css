@@ -1,0 +1,95 @@
+.today-look {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 32px;
+  background: #f3ece1;
+  border-radius: 6px;
+  padding: 32px;
+  margin-bottom: 56px;
+  align-items: center;
+}
+
+.today-look-text h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2.2rem;
+  color: #3b2a20;
+  margin: 6px 0 10px;
+}
+
+.today-look-text p {
+  color: #6b5a4c;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.today-look-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7a8450;
+}
+
+.today-look-btn {
+  background: #3b2a20;
+  color: #f3ece1;
+  border: none;
+  padding: 12px 28px;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.today-look-btn:hover {
+  background: #7a8450;
+}
+
+.today-look-pieces {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 14px;
+}
+
+.today-look-piece {
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.today-look-piece img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+.today-look-piece-info {
+  padding: 8px 10px;
+}
+
+.today-look-piece-info span {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7a8450;
+}
+
+.today-look-piece-info strong {
+  font-size: 0.85rem;
+  color: #3b2a20;
+  font-weight: 500;
+}
+
+.today-look-empty {
+  color: #6b5a4c;
+  font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .today-look {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
